@@ -5,38 +5,44 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import java.util.List;
+
 public class MenClothingPage extends BasePage {
     private By mensWearLink   = By.linkText("Men's wear");
     private By clothingLink   = By.linkText("Clothing");
     private By miniCartCloser = By.cssSelector(".minicart-closer");
+
+    private By productButtonByIndex(int index) {
+        // index incepe de la 1, ca in CSS nth-child
+        return By.cssSelector(".col-md-3:nth-child(" + index + ") .button");
+    }
+
+    private By miniCartItems = By.cssSelector(".minicart-item");
+    private By miniCartRemoveByIndex(int index) {
+        return By.cssSelector(".minicart-item:nth-child(" + index + ") .minicart-remove");
+    }
 
     public MenClothingPage(WebDriver driver) {
         super(driver);
     }
 
     public void openMenClothingCategory() {
-        WebElement mensWear = waitClickable(mensWearLink);
-        mensWear.click();
-
-        WebElement clothing = waitClickable(clothingLink);
-        clothing.click();
+        driver.findElement(By.linkText("Men's wear")).click();
+        driver.findElement(By.linkText("Clothing")).click();
     }
 
     public void addProductToCartByIndex(int index) {
-        By locator = By.cssSelector(".col-md-3:nth-child(" + index + ") .button");
-        WebElement button = waitClickable(locator);
-        scrollIntoView(button);
+        WebElement button = waitClickable(productButtonByIndex(index));
         button.click();
     }
 
-    public void removeFromMiniCartByIndex(int index) {
-        By locator = By.cssSelector(".minicart-item:nth-child(" + index + ") .minicart-remove");
-        WebElement removeBtn = waitClickable(locator);
-        removeBtn.click();
+    public int getMiniCartItemCount() {
+        List<WebElement> items = driver.findElements(miniCartItems);
+        return items.size();
     }
 
-    public void closeMiniCart() {
-        WebElement closeBtn = waitClickable(miniCartCloser);
-        closeBtn.click();
+    public void removeFromMiniCartByIndex(int index) {
+        WebElement removeBtn = waitClickable(miniCartRemoveByIndex(index));
+        removeBtn.click();
     }
 }

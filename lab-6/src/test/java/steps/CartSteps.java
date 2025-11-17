@@ -10,49 +10,46 @@ import support.Hooks;
 
 import java.util.List;
 
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
 public class CartSteps {
     private WebDriver driver;
     private MenClothingPage menClothingPage;
 
-    @When("utilizatorul navigheaza la categoria Men's wear Clothing")
+    private int itemsCountBeforeRemove;
+
+    public CartSteps() {
+        this.driver = Hooks.driver;
+        this.menClothingPage = new MenClothingPage(driver);
+    }
+
+    @And("utilizatorul navigheaza la categoria Men's wear Clothing")
     public void utilizatorul_navigheaza_la_categoria_mens_wear_clothing() {
-        driver = Hooks.driver;
-        menClothingPage = new MenClothingPage(driver);
         menClothingPage.openMenClothingCategory();
     }
 
-    @And("utilizatorul adauga in cos produsele cu pozitiile:")
-    public void utilizatorul_adauga_in_cos_produsele_cu_pozitiile(DataTable dataTable) {
-        List<Integer> positions = dataTable.asList(Integer.class);
-        for (Integer index : positions) {
-            menClothingPage.addProductToCartByIndex(index);
-        }
+    @And("utilizatorul adauga in cos produsele cu pozitiile: {int}, {int}, {int}")
+    public void utilizatorul_adauga_in_cos_produsele_cu_pozitiile(Integer p1, Integer p2, Integer p3) {
+        menClothingPage.addProductToCartByIndex(p1);
+        menClothingPage.addProductToCartByIndex(p2);
+        menClothingPage.addProductToCartByIndex(p3);
+        assertTrue(menClothingPage.getMiniCartItemCount() >= 3);
     }
 
-    @And("utilizatorul sterge din cos produsele cu pozitiile:")
-    public void utilizatorul_sterge_din_cos_produsele_cu_pozitiile(DataTable dataTable) {
-        List<Integer> positions = dataTable.asList(Integer.class);
-        for (Integer index : positions) {
-            menClothingPage.removeFromMiniCartByIndex(index);
-        }
+    @And("utilizatorul sterge din minicart produsul cu pozitia {int}")
+    public void utilizatorul_sterge_din_minicart_produsul_cu_pozitia(Integer pos) {
+        itemsCountBeforeRemove = menClothingPage.getMiniCartItemCount();
+        menClothingPage.removeFromMiniCartByIndex(pos);
     }
 
-    @And("utilizatorul adauga in cos produsul cu pozitia {int}")
-    public void utilizatorul_adauga_in_cos_produsul_cu_pozitia(Integer index) {
-        menClothingPage.addProductToCartByIndex(index);
-    }
-
-    @And("utilizatorul inchide minicart-ul")
-    public void utilizatorul_inchide_minicartul() {
-        menClothingPage.closeMiniCart();
-    }
-
-    @Then("cosul este actualizat corect")
-    public void cosul_este_actualizat_corect() {
-        String title = Hooks.driver.getTitle();
-        assertTrue("Titlul paginii nu ar trebui sa fie gol dupa operatiile pe cos",
-                title != null && !title.isEmpty());
+    @Then("produsul este eliminat din minicart")
+    public void produsul_este_eliminat_din_minicart() {
+        int itemsAfter = menClothingPage.getMiniCartItemCount();
+        assertEquals(
+                "Dupa stergerea unui produs, numarul de item-uri din minicart trebuie sa scada cu 1",
+                itemsCountBeforeRemove - 1,
+                itemsAfter
+        );
     }
 }

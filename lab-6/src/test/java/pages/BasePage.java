@@ -42,4 +42,8 @@ public class BasePage {
     public void openHomePage() {
         driver.get(baseUrl);
     }
+
+    public String getBaseUrl() {
+        return baseUrl;
+    }
 }

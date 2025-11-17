@@ -8,6 +8,7 @@ import cucumber.api.testng.AbstractTestNGCucumberTests;
                 "src/test/resources/features/signup.feature",
                 "src/test/resources/features/signin.feature",
                 "src/test/resources/features/topbar.feature",
+                "src/test/resources/features/footer.feature",
                 "src/test/resources/features/cart.feature"
         },
         glue = {"steps", "support"},

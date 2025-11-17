@@ -1,16 +1,8 @@
-Feature: Gestionarea cosului de cumparaturi
+Feature: Gestionarea produselor din cos
 
-  Scenario: Adaugare si stergere produse din cos
+  Scenario: Stergerea unui produs din minicart
     Given utilizatorul este pe pagina principala
-    When utilizatorul navigheaza la categoria Men's wear Clothing
-    And utilizatorul adauga in cos produsele cu pozitiile:
-      | 2  |
-      | 4  |
-      | 9  |
-      | 11 |
-    And utilizatorul sterge din cos produsele cu pozitiile:
-      | 2 |
-      | 2 |
-    And utilizatorul adauga in cos produsul cu pozitia 1
-    And utilizatorul inchide minicart-ul
-    Then cosul este actualizat corect
+    And utilizatorul navigheaza la categoria Men's wear Clothing
+    And utilizatorul adauga in cos produsele cu pozitiile: 1, 2, 3
+    And utilizatorul sterge din minicart produsul cu pozitia 2
+    Then produsul este eliminat din minicart

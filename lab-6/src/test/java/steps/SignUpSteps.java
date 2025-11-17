@@ -42,9 +42,22 @@ public class SignUpSteps  {
 
     @Then("pagina de dupa inregistrare este afisata corect")
     public void pagina_de_dupa_inregistrare_este_afisata_corect() {
-        String title = Hooks.driver.getTitle();
-        assertTrue(title != null && !title.isEmpty());
+        // 1. Modalul de sign up NU mai trebuie sa fie vizibil
+        assertTrue(
+                "Dupa o inregistrare valida, fereastra de sign up ar trebui sa fie inchisa",
+                !signUpPage.isSignUpModalStillDisplayed()
+        );
+
+        // 2. Utilizatorul trebuie sa fie pe home (sau cel putin pe acelasi baseUrl)
+        String currentUrl = Hooks.driver.getCurrentUrl();
+        String expectedBase = signUpPage.getBaseUrl();
+
+        assertTrue(
+                "Dupa inregistrare, utilizatorul ar trebui sa fie redirectionat pe pagina principala",
+                currentUrl.equals(expectedBase) || currentUrl.startsWith(expectedBase)
+        );
     }
+
 
     @Then("inregistrarea nu este efectuata")
     public void inregistrarea_nu_este_efectuata() {
@@ -58,4 +71,6 @@ public class SignUpSteps  {
     public void utilizatorul_inchide_formularul_de_inregistrare() {
         signUpPage.closeModal();
     }
+
+
 }

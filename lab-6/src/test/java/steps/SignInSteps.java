@@ -24,7 +24,6 @@ public class SignInSteps {
     public void utilizatorul_deschide_formularul_de_autentificare() {
         driver = Hooks.driver;
         signInPage = new SignInPage(driver);
-        // presupunem ca Given deja a deschis pagina principala
         signInPage.openSignInModal();
     }
 
@@ -46,7 +45,6 @@ public class SignInSteps {
 
     @Then("pagina de dupa autentificare este afisata corect")
     public void pagina_de_dupa_autentificare_este_afisata_corect() {
-        // validare simpla generica (poti adapta dupa cerinta laboratorului)
         String title = driver.getTitle();
         assertTrue("Titlul paginii nu ar trebui sa fie gol dupa autentificare",
                 title != null && !title.isEmpty());
@@ -54,7 +52,6 @@ public class SignInSteps {
 
     @Then("autentificarea nu este efectuata")
     public void autentificarea_nu_este_efectuata() {
-        // formularul de login ar trebui sa fie inca afisat
         assertTrue("Formularul de autentificare ar trebui sa fie inca vizibil",
                 signInPage.isSignInModalStillDisplayed());
     }
